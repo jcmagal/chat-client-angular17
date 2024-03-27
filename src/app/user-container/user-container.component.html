@@ -1,0 +1,82 @@
+<div class="chat" *ngIf="show">
+  <div class="chat-title-bar">
+    <div class="icon-container" (click)="onButtonClick()">
+      <i class="fas fa-arrow-right chat-minimize-icon"></i>
+    </div>
+  </div>
+
+  <div class="chat-container" *ngIf="connectedUser">
+    <div class="users-list">
+      <div class="users-list-container">
+        <h2>Funcionários</h2>
+        <ul id="connectedUsers">
+          <ng-container *ngFor="let user of users; let last = last">
+            <li class="user-item" [ngClass]="{ active: user === selectedUser }" (click)="selectUser(user)">
+              <img src="assets/img/user_icon.png" alt="{{ user.fullName }}" />
+              <div class="user-view">
+                <div class="user-info">
+                  <span>{{ user.fullName }}</span>
+                  <span *ngIf="user.status === 'ONLINE'; else offlineStatus" class="user-status-online">● Online</span>
+                  <ng-template #offlineStatus><span class="user-status-offline">● Offline</span></ng-template>
+                </div>
+                <div class="notification">
+                  <span *ngIf="unreadMessagesCount[user.nickName] > 0 && user !== selectedUser" class="nbr-msg">
+                    {{ unreadMessagesCount[user.nickName] }}
+                  </span>
+                </div>
+              </div>
+            </li>
+            <div *ngIf="!last" class="separator"></div>
+          </ng-container>
+        </ul>
+      </div>
+      <div>
+        <p id="connected-user-fullname">{{ connectedUser.fullName }}</p>
+      </div>
+    </div>
+
+    <div class="chat-area">
+      <div id="chat-messages" #chatMessages>
+        <ng-container *ngIf="(messages$ | async) as messages">
+          <div *ngFor="let receivedMessage of messages; let i = index" class="message">
+            <div *ngIf="isFirstMessageOfDay(receivedMessage, i, messages)" class="date-marker">
+              {{ receivedMessage.timestamp | date : "EEEE, d 'de' MMMM 'de' y" : "+0000" : "pt" }}
+            </div>
+            <div class="message-header" [ngClass]="
+                receivedMessage.senderId === connectedUser.nickName ? 'sender-header': 'receiver-header' ">
+              <span>{{ getUserFullName(receivedMessage.senderId) }} às&nbsp;</span>
+              <span>{{ receivedMessage.timestamp | date : "HH:mm" }}</span>
+            </div>
+            <p [ngClass]="receivedMessage.senderId === connectedUser.nickName ? 'sender' : 'receiver'">
+              {{ receivedMessage.content }}
+            </p>
+          </div>
+        </ng-container>
+      </div>
+
+      <div class="card-footer">
+        <form id="messageForm" name="messageForm" #messageForm="ngForm" (ngSubmit)="sendMessage()">
+          <div class="message-input">
+            <input autocomplete="off" type="text" id="message" name="message" placeholder="Escreva sua mensagem..."
+              [(ngModel)]="message" />
+            <i class="far fa-paper-plane send-icon" (click)="messageForm.valid && sendMessage()"></i>
+            <i class="fas fa-paperclip send-file"></i>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="chat-bar" *ngIf="!show">
+  <div class="infor-bar">
+    <span>{{ connectedUser?.fullName }} </span>
+    <span *ngIf="notificacaoRecebida">
+      &nbsp;<i class="fas fa-bell fa-shake-blink" style="color: #ce1c1c"></i>
+    </span>
+  </div>
+
+  <div class="bar-open" (click)="onButtonClick()">
+    <i class="fas fa-external-link-alt fa-flip-horizontal open-icon" style="color: #fcfcfc"></i>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+<div class="user-form">
+<form (ngSubmit)="onSubmit()" #enterChatForm="ngForm">
+  <label for="nickname">Nickname:</label>
+  <input type="text" name="nickname" id="nickname" required [(ngModel)]="nickname">
+  <label for="fullname">Real name:</label>
+  <input type="text" name="fullname" id="fullname" required [(ngModel)]="fullname">
+  <button type="submit">Enter chatroom</button>
+</form>
+</div>
