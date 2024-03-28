@@ -1,4 +1,22 @@
-# ChatAngular
+# Chat Application
+
+This project is a chat application designed to enable users to communicate in real-time. It's built using Angular and leverages WebSockets for real-time messaging. The application allows users to send and receive messages instantly, view online/offline status, and receive notifications.
+
+## Features
+
+- Real-time messaging between users
+- Display of online/offline status
+- Notifications for unread messages
+- Expand/collapse chat interface
+- User list displaying current chat participants
+- Message date and time stamps
+
+## Technologies Used
+
+- Angular
+- TypeScript
+- HTML & CSS
+- [Additional technologies like Node.js, Express, Socket.IO]
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.2.1.
 
